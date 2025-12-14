@@ -1,0 +1,310 @@
+{% extends 'layouts/default.html' %}
+{% load humanize %}
+{% block title %}Manage Products - {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-header-row">
+        <h1>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            </svg>
+            Manage Products
+        </h1>
+        <div class="page-header-actions">
+            <a href="{% url 'admin_product_add' %}" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Add New Product
+            </a>
+        </div>
+    </div>
+    <p class="page-subtitle">Add, edit, and manage your product inventory.</p>
+</div>
+
+<!-- Filters -->
+<div class="card" style="margin-bottom: 1.5rem;">
+    <form method="GET" class="filters-form">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: end;">
+            <div style="flex: 2; min-width: 200px;">
+                <label for="search">Search</label>
+                <input type="text" id="search" name="search" placeholder="Search by name..." value="{{ search|default:'' }}">
+            </div>
+            <div style="flex: 1; min-width: 150px;">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="flex: 1; min-width: 150px;">
+                <label for="filter">Stock Filter</label>
+                <select id="filter" name="filter">
+                    <option value="">All Products</option>
+                    <option value="low_stock" {% if filter == 'low_stock' %}selected{% endif %}>Low Stock (&lt;= 10)</option>
+                    <option value="out_of_stock" {% if filter == 'out_of_stock' %}selected{% endif %}>Out of Stock</option>
+                    <option value="in_stock" {% if filter == 'in_stock' %}selected{% endif %}>In Stock</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    Filter
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Products Table -->
+<div class="card">
+    <div class="card-header">
+        <h2>Products ({{ total_products }})</h2>
+    </div>
+    {% if products %}
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Image</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th style="width: 80px; text-align: center;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>
+                        <div class="product-thumb">
+                            {% if product.image_url %}
+                            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                            {% else %}
+                            <div class="product-placeholder-sm">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                </svg>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <strong>{{ product.name }}</strong>
+                        <p class="product-desc-preview">{{ product.description|truncatewords:10 }}</p>
+                    </td>
+                    <td>{{ product.category }}</td>
+                    <td>${{ product.price|floatformat:2|intcomma }}</td>
+                    <td>
+                        <span class="stock-count">{{ product.stock_quantity|intcomma }}</span>
+                    </td>
+                    <td>
+                        {% if product.stock_quantity == 0 %}
+                        <span class="status-badge out-of-stock">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            Out of Stock
+                        </span>
+                        {% elif product.stock_quantity <= 10 %}
+                        <span class="status-badge low-stock">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                            Low Stock
+                        </span>
+                        {% else %}
+                        <span class="status-badge in-stock">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            In Stock
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td style="text-align: center;">
+                        <div class="kebab-menu">
+                            <button class="kebab-btn" title="Actions">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="5" r="1"></circle>
+                                    <circle cx="12" cy="12" r="1"></circle>
+                                    <circle cx="12" cy="19" r="1"></circle>
+                                </svg>
+                            </button>
+                            <div class="kebab-dropdown">
+                                <a href="{% url 'admin_product_edit' product.id %}" class="kebab-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    Edit Product
+                                </a>
+                                <button type="button" class="kebab-item quick-stock-btn" data-product-id="{{ product.id }}" data-product-name="{{ product.name }}" data-current-stock="{{ product.stock_quantity }}">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                                    </svg>
+                                    Quick Stock Adjustment
+                                </button>
+                                <button class="kebab-item danger delete-product-btn" data-product-id="{{ product.id }}" data-product-name="{{ product.name }}">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                    Delete Product
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <div class="pagination-container">
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="?page={{ page|add:'-1' }}{% if search %}&search={{ search }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if filter %}&filter={{ filter }}{% endif %}" class="btn btn-sm">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Previous
+            </a>
+            {% else %}
+            <button class="btn btn-sm" disabled>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Previous
+            </button>
+            {% endif %}
+
+            {% for p in page_range %}
+                {% if p == page %}
+                <span class="btn btn-sm btn-primary">{{ p }}</span>
+                {% else %}
+                <a href="?page={{ p }}{% if search %}&search={{ search }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if filter %}&filter={{ filter }}{% endif %}" class="btn btn-sm">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+            <a href="?page={{ page|add:'1' }}{% if search %}&search={{ search }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if filter %}&filter={{ filter }}{% endif %}" class="btn btn-sm">
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </a>
+            {% else %}
+            <button class="btn btn-sm" disabled>
+                Next
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="empty-state">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+        </svg>
+        <h3>No products found</h3>
+        <p>{% if search or category or filter %}Try adjusting your filters.{% else %}Get started by adding your first product.{% endif %}</p>
+        {% if not search and not category and not filter %}
+        <a href="{% url 'admin_product_add' %}" class="btn btn-primary">Add Product</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Quick Stock Adjustment Modal -->
+<div class="modal" id="stock-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-sm">
+        <div class="modal-header">
+            <h2>Quick Stock Adjustment</h2>
+            <button class="modal-close" id="stock-modal-close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p style="margin-bottom: 1rem;"><strong id="stock-product-name"></strong></p>
+            <p style="margin-bottom: 1rem;">Current Stock: <strong id="current-stock-display"></strong></p>
+            
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label for="adjustment-type">Adjustment Type</label>
+                <select id="adjustment-type" class="form-control">
+                    <option value="add">Add to Stock</option>
+                    <option value="remove">Remove from Stock</option>
+                    <option value="set">Set Stock To</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="adjustment-quantity">Quantity</label>
+                <input type="number" id="adjustment-quantity" class="form-control" min="0" value="0" required>
+            </div>
+            
+            <p id="new-stock-preview" style="margin-top: 1rem; padding: 0.75rem; background: var(--gray-100); border-radius: var(--radius-md); font-weight: 500;"></p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="cancel-stock">Cancel</button>
+            <button class="btn btn-primary" id="confirm-stock">Update Stock</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal" id="delete-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-sm">
+        <div class="modal-header">
+            <h2>Delete Product</h2>
+            <button class="modal-close" id="modal-close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete <strong id="delete-product-name"></strong>?</p>
+            <p class="warning-text">This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="cancel-delete">Cancel</button>
+            <button class="btn btn-danger" id="confirm-delete">Delete</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.csrfToken = '{{ csrf_token }}';
+</script>
+<script src="/static/js/admin/products-list.js"></script>
+{% endblock %}

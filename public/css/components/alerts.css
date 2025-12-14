@@ -1,0 +1,109 @@
+/* ============================================
+   Alerts
+   ============================================ */
+.alerts-container {
+    margin-bottom: 1.5rem;
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 0.75rem;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert-success {
+    background: var(--success-bg);
+    color: #166534;
+    border-left: 4px solid var(--success);
+}
+
+.alert-error, .alert-danger {
+    background: var(--error-bg);
+    color: #991b1b;
+    border-left: 4px solid var(--error);
+}
+
+.alert-warning {
+    background: var(--warning-bg);
+    color: #92400e;
+    border-left: 4px solid var(--warning);
+}
+
+.alert-info {
+    background: var(--info-bg);
+    color: #1e40af;
+    border-left: 4px solid var(--info);
+}
+
+.alert-close {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+.alert-close svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Auth Alert */
+.auth-alert {
+    position: fixed;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 1rem 2rem;
+    border-radius: var(--radius-lg);
+    font-weight: 500;
+    font-size: 0.9rem;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    animation: alertSlide 0.3s ease;
+}
+
+@keyframes alertSlide {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.auth-alert.alert-success {
+    background: var(--success);
+    color: white;
+}
+
+.auth-alert.alert-error,
+.auth-alert.alert-danger {
+    background: var(--error);
+    color: white;
+}
+

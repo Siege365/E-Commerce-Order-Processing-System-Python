@@ -1,0 +1,141 @@
+{% extends 'layouts/default.html' %}
+{% load humanize %}
+{% block title %}Dashboard - {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+    </h1>
+    <p class="page-subtitle">Welcome back! Here's an overview of your account.</p>
+</div>
+
+<!-- Customer Dashboard -->
+<div class="metrics">
+    <div class="metric-card success">
+        <div class="metric-card-icon">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        </div>
+        <h3>Total Orders</h3>
+        <div class="value">{{ stats.total_orders|intcomma }}</div>
+    </div>
+
+    <div class="metric-card warning">
+        <div class="metric-card-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <h3>Pending Orders</h3>
+        <div class="value">{{ stats.pending_orders|intcomma }}</div>
+    </div>
+
+    <div class="metric-card info">
+        <div class="metric-card-icon">
+            <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        </div>
+        <h3>Delivered Orders</h3>
+        <div class="value">{{ stats.delivered_orders|intcomma }}</div>
+    </div>
+
+    <div class="metric-card">
+        <div class="metric-card-icon">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+        </div>
+        <h3>Total Spent</h3>
+        <div class="value">${{ stats.total_spent|floatformat:0|intcomma }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            Recent Orders
+        </h2>
+        <a href="{% url 'orders' %}" class="btn btn-sm">View All Orders &raquo;</a>
+    </div>
+    {% if stats.recent_orders %}
+    <table>
+        <colgroup>
+            <col style="width:25%;"> <!-- Order # -->
+            <col style="width:25%;"> <!-- Total -->
+            <col style="width:25%;"> <!-- Date -->
+            <col style="width:25%;"> <!-- Status -->
+            <col style="width:25%;"> <!-- Actions -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Total</th>
+                <th>Date</th> 
+                <th>Status</th>
+                <th>Actions</th> 
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in stats.recent_orders %}
+            <tr>
+                <td>
+                    <a href="{% url 'order_detail' order.id %}"
+                       title="{{ order.order_number }}"
+                       style="display:inline-block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                        {{ order.order_number }}
+                    </a>
+                </td>
+                <td>${{ order.total|floatformat:2|intcomma }}</td>
+                <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                <td><span class="status {{ order.status }}">{{ order.status }}</span></td>
+                <td><a href="{% url 'order_detail' order.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if stats.total_pages > 1 %}
+    <div style="text-align: center; margin-top: 30px;">
+        <div class="pagination" style="display: inline-flex;">
+            {% if stats.page > 1 %}
+            <a href="?page={{ stats.page|add:'-1' }}" class="btn btn-sm">&laquo; Prev</a>
+            {% endif %}
+
+            {% for p in stats.page|make_list %}
+            <span class="btn btn-sm btn-primary">{{ stats.page }}</span>
+            {% endfor %}
+
+            {% if stats.page < stats.total_pages %}
+            <a href="?page={{ stats.page|add:'1' }}" class="btn btn-sm">Next &raquo;</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="empty-state">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+        </svg>
+        <h3>No recent orders</h3>
+        <p>Start shopping to see your orders here!</p>
+        <a href="{% url 'products' %}" class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            Browse Products
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

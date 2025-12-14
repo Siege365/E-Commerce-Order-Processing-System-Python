@@ -1,0 +1,8 @@
+# Django E-Commerce Requirements
+# ShopPy - E-Commerce Order Processing System
+
+Django>=4.2,<5.0
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+bcrypt>=4.0.0
+whitenoise>=6.5.0

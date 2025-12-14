@@ -1,0 +1,158 @@
+/* ============================================
+   Reports Page
+   ============================================ */
+.report-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.report-chart {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+}
+
+.report-chart h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.report-chart h3 svg {
+    color: var(--primary);
+}
+
+.chart-placeholder {
+    height: 250px;
+    background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-400);
+}
+
+/* Rank Badges - Gold, Silver, Bronze */
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 0.85rem;
+    background: var(--gray-200);
+    color: var(--gray-700);
+}
+
+.rank-badge.gold {
+    background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+    color: #6b4f00;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+.rank-badge.silver {
+    background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%);
+    color: #424242;
+    box-shadow: 0 2px 8px rgba(189, 189, 189, 0.4);
+}
+
+.rank-badge.bronze {
+    background: linear-gradient(135deg, #cd7f32 0%, #a0522d 100%);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(205, 127, 50, 0.4);
+}
+
+/* Export Options List in Modal */
+.export-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.export-options-list .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.export-options-list .checkbox-label:hover {
+    background: var(--primary-bg);
+}
+
+.export-options-list .checkbox-label:has(input:checked) {
+    background: var(--primary-bg);
+    border-color: var(--primary);
+}
+
+.export-options-list .checkbox-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.export-options-list .checkbox-text strong {
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.export-options-list .checkbox-text small {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+}
+
+.export-options-list input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--primary);
+}
+
+/* Status change preview in modal */
+.status-change-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    margin: 1rem 0;
+}
+
+.status-change-preview .status-from,
+.status-change-preview .status-to {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-change-preview .label {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.status-change-preview svg {
+    color: var(--gray-400);
+}
+
+@media (max-width: 768px) {
+    .report-grid {
+        grid-template-columns: 1fr;
+    }
+}

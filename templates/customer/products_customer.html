@@ -1,0 +1,151 @@
+{% extends 'layouts/default.html' %}
+{% load humanize %}
+{% block title %}Products - {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+        Products
+    </h1>
+    <p class="page-subtitle">Browse our collection of amazing products.</p>
+</div>
+
+<!-- Search and Filter -->
+<div class="card" style="margin-bottom: 2rem;">
+    <form method="GET" action="{% url 'products' %}" class="search-filter-form">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: end;">
+            <div style="flex: 2; min-width: 200px;">
+                <label for="search">Search Products</label>
+                <input type="text" id="search" name="search" placeholder="Search by name or description..." value="{{ search|default:'' }}">
+            </div>
+            <div style="flex: 1; min-width: 150px;">
+                <label for="category">Category</label>
+                <select id="category" name="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="flex: 1; min-width: 150px;">
+                <label for="sort">Sort By</label>
+                <select id="sort" name="sort">
+                    <option value="name" {% if sort == 'name' %}selected{% endif %}>Name (A-Z)</option>
+                    <option value="name_desc" {% if sort == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+                    <option value="price" {% if sort == 'price' %}selected{% endif %}>Price (Low-High)</option>
+                    <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price (High-Low)</option>
+                    <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest First</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    Search
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Products Grid -->
+<div class="products-grid" id="products-grid">
+    {% for product in products %}
+    <div class="product-card" data-product-id="{{ product.id }}">
+        <div class="product-image">
+            {% if product.image_url %}
+            <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+            {% else %}
+            <div class="product-placeholder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+            </div>
+            {% endif %}
+            {% if product.stock_quantity <= 5 and product.stock_quantity > 0 %}
+            <span class="product-badge low-stock">Only {{ product.stock_quantity }} left!</span>
+            {% elif product.stock_quantity == 0 %}
+            <span class="product-badge out-of-stock">Out of Stock</span>
+            {% endif %}
+        </div>
+        <div class="product-info">
+            <span class="product-category">{{ product.category }}</span>
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+            <div class="product-footer">
+                <div class="product-price-section">
+                    <span class="product-price">${{ product.price|floatformat:2|intcomma }}</span>
+                    {% if product.stock_quantity > 0 %}
+                    <div class="quantity-spinner">
+                        <button class="qty-btn qty-decrease" data-product-id="{{ product.id }}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                        <input type="number" class="qty-input" data-product-id="{{ product.id }}" value="1" min="1" max="{{ product.stock_quantity }}" readonly>
+                        <button class="qty-btn qty-increase" data-product-id="{{ product.id }}">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if product.stock_quantity > 0 %}
+                <button class="btn btn-sm btn-primary add-to-cart-btn" data-product-id="{{ product.id }}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    Add to Cart
+                </button>
+                {% else %}
+                <button class="btn btn-sm" disabled>Out of Stock</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="no-products">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        </svg>
+        <h3>No products found</h3>
+        <p>Try adjusting your search or filter criteria.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Infinite Scroll Status -->
+<div class="infinite-scroll-status" id="infinite-scroll-status" style="display: none;" data-has-more="{{ has_more|yesno:'true,false' }}" data-next-page="{{ next_page|default:'' }}">
+    <div class="spinner"></div>
+    <span>Loading more products...</span>
+</div>
+
+<!-- End of Products Message -->
+<div class="end-of-products" id="end-of-products" style="display: none;">
+    <p>You've seen all products!</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.productsUrls = {
+    products: '{% url "products" %}',
+    apiCartAdd: '{% url "api_cart_add" %}'
+};
+window.csrfToken = '{{ csrf_token }}';
+</script>
+<script src="/static/js/customer/products.js?v=20251212-002"></script>
+{% endblock %}

@@ -1,0 +1,97 @@
+/* ============================================
+   Dashboard Page
+   ============================================ */
+
+/* Charts & Dashboard Grid */
+.charts-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.charts-row .chart-card.large {
+    grid-column: span 2;
+}
+
+.chart-card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    min-height: 350px;
+}
+
+.chart-container {
+    padding: 1rem 1.25rem 1.25rem;
+    height: 280px;
+}
+
+.chart-card.large .chart-container {
+    height: 320px;
+}
+
+.chart-container canvas {
+    max-height: 100%;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    color: var(--gray-700);
+    transition: all var(--transition-fast);
+}
+
+.quick-action-btn svg {
+    width: 32px;
+    height: 32px;
+    color: var(--primary);
+}
+
+.quick-action-btn span {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.quick-action-btn:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+}
+
+.quick-action-btn:hover svg {
+    color: var(--white);
+}
+
+@media (max-width: 1024px) {
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .charts-row .chart-card.large {
+        grid-column: span 1;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}

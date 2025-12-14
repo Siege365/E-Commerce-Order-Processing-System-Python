@@ -1,0 +1,304 @@
+{% extends 'layouts/default.html' %}
+{% load humanize %}
+{% block title %}Order {{ order.order_number }} - {{ APP_NAME }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="breadcrumb">
+        <a href="{% url 'admin_orders' %}">Orders</a>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <span>{{ order.order_number }}</span>
+    </div>
+    <h1>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        Order {{ order.order_number }}
+    </h1>
+</div>
+
+<!-- Status Update Bar -->
+<div class="card status-update-card">
+    <div class="status-info">
+        <span class="label">Current Status:</span>
+        <span class="status {{ order.status }} large">{{ order.status }}</span>
+    </div>
+    <div class="status-actions">
+        <label for="update-status">Update Status:</label>
+        <select id="update-status" class="status-select">
+            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="processing" {% if order.status == 'processing' %}selected{% endif %}>Processing</option>
+            <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+        </select>
+        <button class="btn btn-primary" id="update-status-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            </svg>
+            Update
+        </button>
+    </div>
+</div>
+
+<div class="order-detail-layout">
+    <!-- Order Items -->
+    <div class="order-items-section">
+        <div class="card">
+            <div class="card-header">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                    Order Items ({{ order.items.count }})
+                </h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">Image</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>
+                            <div class="product-thumb-sm">
+                                {% if item.product.image_url %}
+                                <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+                                {% else %}
+                                <div class="product-placeholder-sm">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    </svg>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <strong>{{ item.product.name }}</strong>
+                            <small class="text-muted">{{ item.product.category }}</small>
+                        </td>
+                        <td>${{ item.product.price|floatformat:2|intcomma }}</td>
+                        <td>{{ item.quantity|intcomma }}</td>
+                        <td><strong>${{ item.subtotal|floatformat:2|intcomma }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Order Timeline -->
+        <div class="card">
+            <div class="card-header">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    Order Timeline
+                </h2>
+            </div>
+            <div class="timeline">
+                <!-- Always show order placed first -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">{{ order.created_at|date:"M j, Y g:i a" }}</span>
+                        <p class="timeline-text">Order placed</p>
+                    </div>
+                </div>
+                {% for event in order.timeline.all reversed %}
+                <div class="timeline-item">
+                    <div class="timeline-marker {% if forloop.first %}active{% endif %}"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">{{ event.created_at|date:"M j, Y g:i a" }}</span>
+                        <p class="timeline-text">{{ event.description }}</p>
+                        {% if event.user %}
+                        <small class="timeline-user">by {{ event.user.username }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="order-summary-section">
+        <!-- Customer Info -->
+        <div class="card">
+            <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                Customer Information
+            </h2>
+            <div class="customer-details">
+                <div class="detail-row">
+                    <span class="label">Name:</span>
+                    <span class="value">{{ order.customer.first_name }} {{ order.customer.last_name }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Email:</span>
+                    <span class="value">
+                        <a href="mailto:{{ order.customer.user.email }}">{{ order.customer.user.email }}</a>
+                    </span>
+                </div>
+                {% if order.customer.phone %}
+                <div class="detail-row">
+                    <span class="label">Phone:</span>
+                    <span class="value">{{ order.customer.phone }}</span>
+                </div>
+                {% endif %}
+                <a href="{% url 'admin_customer_detail' order.customer.id %}" class="btn btn-sm btn-block" style="margin-top: 1rem;">
+                    View Customer Profile
+                </a>
+            </div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div class="card">
+            <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                Shipping Address
+            </h2>
+            <div class="address-block">
+                {{ order.shipping_address|linebreaksbr }}
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="card">
+            <h2>Order Summary</h2>
+            <div class="order-meta">
+                <div class="meta-row">
+                    <span class="label">Order Number:</span>
+                    <span class="value">{{ order.order_number }}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="label">Order Date:</span>
+                    <span class="value">{{ order.created_at|date:"F j, Y, g:i a" }}</span>
+                </div>
+                <div class="meta-row">
+                    <span class="label">Payment Method:</span>
+                    <span class="value">{{ order.get_payment_method_display|default:"N/A" }}</span>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="price-breakdown">
+                <div class="price-row">
+                    <span>Subtotal</span>
+                    <span>${{ order.subtotal|floatformat:2|intcomma }}</span>
+                </div>
+                <div class="price-row">
+                    <span>Tax</span>
+                    <span>${{ order.tax|floatformat:2|intcomma }}</span>
+                </div>
+                <div class="price-row">
+                    <span>Shipping</span>
+                    <span>{% if order.shipping == 0 %}<span class="free-shipping">FREE</span>{% else %}${{ order.shipping|floatformat:2|intcomma }}{% endif %}</span>
+                </div>
+                <div class="price-row total">
+                    <span>Total</span>
+                    <span>${{ order.total|floatformat:2|intcomma }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="order-actions">
+            <a href="{% url 'admin_orders' %}" class="btn btn-block">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Orders
+            </a>
+            <button class="btn btn-block" id="print-order">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                Print Invoice
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Status Update Confirmation Modal -->
+<div class="modal" id="status-modal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-sm">
+        <div class="modal-header">
+            <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                    <path d="M12 16v-4"></path>
+                    <path d="M12 8h.01"></path>
+                </svg>
+                Confirm Status Update
+            </h2>
+            <button class="modal-close" id="modal-close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to update the order status?</p>
+            <div class="status-change-preview">
+                <div class="status-from">
+                    <span class="label">Current:</span>
+                    <span class="status {{ order.status }}" id="modal-current-status">{{ order.status|title }}</span>
+                </div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+                <div class="status-to">
+                    <span class="label">New:</span>
+                    <span class="status" id="modal-new-status"></span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" id="cancel-update">Cancel</button>
+            <button class="btn btn-primary" id="confirm-update">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                Confirm Update
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.orderUrls = {
+    updateStatus: '{% url "api_order_update_status" %}'
+};
+window.orderId = '{{ order.id }}';
+window.currentStatus = '{{ order.status }}';
+window.csrfToken = '{{ csrf_token }}';
+</script>
+<script src="/static/js/admin/order-detail.js?v=20251214-001"></script>
+{% endblock %}
