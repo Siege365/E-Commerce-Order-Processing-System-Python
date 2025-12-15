@@ -18,7 +18,7 @@
 - [Key Features](#key-features)
 - [API Endpoints](#api-endpoints)
 - [Database Schema](#database-schema)
-- [Deployment to PythonAnywhere](#deployment-to-pythonanywhere)
+- [Deployment to Render](#deployment-to-render)
 - [Troubleshooting](#troubleshooting)
 - [Development Guide](#development-guide)
 
@@ -902,83 +902,78 @@ class OrderItem:
 ---
 
 ## Deployment to PythonAnywhere
+##  Deployment to Render
 
-ShopPy is configured for easy deployment to [PythonAnywhere](https://www.pythonanywhere.com) - a beginner-friendly Python hosting platform with a free tier.
+ShopPy is configured for easy deployment to [Render](https://render.com). Follow these steps:
 
-### Quick Deploy Summary
+### Option 1: Blueprint Deployment (Recommended)
 
-1. **Sign up** at [www.pythonanywhere.com](https://www.pythonanywhere.com) (free tier available)
-2. **Upload your code** via Git or file upload
-3. **Create virtual environment** and install dependencies
-4. **Configure database** (MySQL or SQLite)
-5. **Set up web app** with WSGI configuration
-6. **Configure static files** mapping
-7. **Reload** and access your site at yourusername.pythonanywhere.com
+1. **Fork/Push to GitHub**: Ensure your code is in a GitHub repository
 
-### Complete Deployment Guide
+2. **Deploy via Blueprint**:
+   - Go to [Render Dashboard](https://dashboard.render.com)
+   - Click **New**  **Blueprint**
+   - Connect your GitHub repository
+   - Render will auto-detect `render.yaml` and create all services
 
-See **[DEPLOYMENT_PYTHONANYWHERE.md](DEPLOYMENT_PYTHONANYWHERE.md)** for detailed step-by-step instructions including:
+3. **Set Environment Variables** (if not using Blueprint):
+   - `ADMIN_USERNAME`: Admin username
+   - `ADMIN_EMAIL`: Admin email
+   - `ADMIN_PASSWORD`: Secure admin password
 
-- Virtual environment setup
-- Database configuration (MySQL/SQLite)
-- WSGI configuration
-- Static files setup
-- Troubleshooting guide
-- Database backup/restore
-- Update procedures
+### Option 2: Manual Deployment
 
-### Key Files for PythonAnywhere
+1. **Create PostgreSQL Database**:
+   - Go to Render Dashboard  **New**  **PostgreSQL**
+   - Choose a name and region
+   - Note the **Internal Database URL**
 
-| File                           | Purpose                                    |
-| ------------------------------ | ------------------------------------------ |
-| `pythonanywhere_wsgi.py`       | WSGI configuration template                |
-| `requirements.txt`             | Python dependencies (includes mysqlclient) |
-| `.env.example`                 | Environment variables template             |
-| `DEPLOYMENT_PYTHONANYWHERE.md` | Complete deployment documentation          |
+2. **Create Web Service**:
+   - Go to Render Dashboard  **New**  **Web Service**
+   - Connect your GitHub repository
+   - Configure:
+     - **Runtime**: Python 3
+     - **Build Command**: `./build.sh`
+     - **Start Command**: `gunicorn lib.ECommerce.wsgi:application --bind 0.0.0.0:$PORT`
 
-### Environment Variables
+3. **Add Environment Variables**:
+   ``
+   DJANGO_SECRET_KEY    = (click "Generate" for a secure key)
+   DEBUG                = False
+   ALLOWED_HOSTS        = your-app-name.onrender.com
+   DATABASE_URL         = (paste Internal Database URL from step 1)
+   ADMIN_USERNAME       = admin
+   ADMIN_EMAIL          = admin@yourdomain.com
+   ADMIN_PASSWORD       = your-secure-password
+   ``
 
-Create a `.env` file in your project root:
-
-`env
-DJANGO_SECRET_KEY=your-generated-secret-key
-DEBUG=False
-ALLOWED_HOSTS=yourusername.pythonanywhere.com
-DATABASE_URL=mysql://user:pass@host/database  # Optional: for MySQL
-ADMIN_USERNAME=admin
-ADMIN_EMAIL=admin@shoppy.com
-ADMIN_PASSWORD=your-secure-password
-`
+4. **Deploy**: Click **Create Web Service**
 
 ### Post-Deployment
 
-- **Access your app**: `https://yourusername.pythonanywhere.com`
-- **Login**: Use admin credentials from `.env`
-- **Import sample data**: Run scripts in Bash console or Django admin
+- **Access your app**: `https://your-app-name.onrender.com`
+- **Login**: Use the admin credentials you set
+- **Import sample data** (optional): Use Django admin or create products manually
 
-### Why PythonAnywhere?
+### Deployment Files
 
-**Free tier** with no credit card required  
- **Beginner-friendly** web interface  
- **One-click MySQL** database included  
- **HTTPS** enabled automatically  
- **Good for** learning, portfolios, small projects
+| File               | Purpose                                              |
+|--------------------|------------------------------------------------------|
+| `render.yaml`      | Render Blueprint configuration                       |
+| `build.sh`         | Build script (migrations, collectstatic, admin user) |
+| `Procfile`         | Process configuration for gunicorn                   |
+| `runtime.txt`      | Python version specification                         |
+| `requirements.txt` | Python dependencies                                  |
+
+### Custom Domain
+
+To use a custom domain:
+
+1. Add domain in Render Dashboard  Your Service  Settings  Custom Domains
+2. Add environment variable: `CUSTOM_DOMAIN=www.yourdomain.com`
+3. Update DNS records as instructed by Render
 
 ---
-
-## ï¿½ðŸ› Troubleshooting
-
-### Common Issues
-
-#### 1. Database Locked Error
-
-**Symptom**: `OperationalError: database is locked`
-
-**Solution**:
-
-```bash
-# Stop all Django processes
-# Restart server with single thread
 python manage.py runserver --nothreading --noreload
 ```
 
