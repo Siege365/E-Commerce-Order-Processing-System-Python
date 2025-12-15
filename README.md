@@ -1388,5 +1388,3 @@ python manage.py migrate
 **Happy coding! 🚀**
 
 ShopPy - Wrapped in code, packed with deals.
-
-
