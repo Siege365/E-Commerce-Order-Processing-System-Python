@@ -9,6 +9,7 @@ Equivalent to the Perl ECommerce::Config module.
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 # Load environment variables from .env file
 load_dotenv()
@@ -26,7 +27,12 @@ SECRET_KEY = os.getenv(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if host.strip()]
+
+# Render.com specific: Add the Render external hostname
+RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 INSTALLED_APPS = [
@@ -74,12 +80,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'lib.ECommerce.wsgi.application'
 
 # Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'data' / 'ecommerce.db',
+# Use DATABASE_URL for production (PostgreSQL on Render)
+# Falls back to SQLite for local development
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+if DATABASE_URL:
+    # Production: Use PostgreSQL from DATABASE_URL
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        )
     }
-}
+else:
+    # Development: Use SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'data' / 'ecommerce.db',
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -108,6 +130,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'public']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# WhiteNoise configuration for production static files
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Media files (User uploads)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -133,6 +158,15 @@ if not DEBUG:
 if not DEBUG:
     CSRF_COOKIE_SECURE = True  # HTTPS only in production
     CSRF_COOKIE_HTTPONLY = True
+    
+    # CSRF Trusted Origins for Render.com
+    CSRF_TRUSTED_ORIGINS = [
+        'https://*.onrender.com',
+    ]
+    # Add custom domain if set
+    CUSTOM_DOMAIN = os.getenv('CUSTOM_DOMAIN')
+    if CUSTOM_DOMAIN:
+        CSRF_TRUSTED_ORIGINS.append(f'https://{CUSTOM_DOMAIN}')
 
 # Security settings for production
 if not DEBUG:

@@ -2,43 +2,130 @@
    Responsive Styles
    ============================================ */
 
-/* Main Layout Responsive */
+/* ============================================
+   Mobile Sidebar Overlay
+   ============================================ */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.sidebar-mobile-open .sidebar-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ============================================
+   Tablet & Mobile Sidebar (max-width: 1024px)
+   ============================================ */
 @media (max-width: 1024px) {
+    /* Hide sidebar by default on mobile/tablet */
     .sidebar {
+        transform: translateX(-100%);
+        width: var(--sidebar-width) !important;
+    }
+    
+    /* Show sidebar when mobile-open class is present */
+    .sidebar-mobile-open .sidebar {
+        transform: translateX(0);
+    }
+    
+    /* CRITICAL FIX: Ensure text is VISIBLE when sidebar is open on mobile */
+    /* Override the collapsed state that hides text */
+    .sidebar-mobile-open .sidebar-brand-text {
+        opacity: 1 !important;
+        width: auto !important;
+        min-width: 150px !important;
+    }
+    
+    .sidebar-mobile-open .nav-link span:not(.nav-badge) {
+        opacity: 1 !important;
+        width: auto !important;
+    }
+    
+    .sidebar-mobile-open .logout-btn span {
+        opacity: 1 !important;
+        width: auto !important;
+    }
+    
+    .sidebar-mobile-open .nav-badge {
+        position: absolute !important;
+        right: 1rem !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+    }
+    
+    /* Main content should take full width on mobile */
+    .main-content {
+        margin-left: 0;
+    }
+    
+    /* Desktop collapsed state should not affect mobile */
+    .sidebar-collapsed .sidebar {
         transform: translateX(-100%);
     }
     
-    .sidebar-collapsed .sidebar {
+    .sidebar-collapsed.sidebar-mobile-open .sidebar {
         transform: translateX(0);
-        width: var(--sidebar-width);
-    }
-    
-    .main-content {
-        margin-left: 0;
     }
     
     .sidebar-collapsed .main-content {
         margin-left: 0;
     }
+    
+    /* Topbar adjustments */
+    .topbar {
+        padding: 0 1rem;
+    }
+    
+    .topbar-search {
+        max-width: 200px;
+    }
 }
 
+/* ============================================
+   Mobile Styles (max-width: 768px)
+   ============================================ */
 @media (max-width: 768px) {
+    /* Page Content */
     .page-content {
         padding: 1rem;
     }
     
+    /* Metrics Grid */
     .metrics {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
+    .metric-card {
+        padding: 1.25rem;
+    }
+    
+    /* Products Grid */
     .products-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
+    /* Forms */
     .form-row {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
+    /* Hide search and user info on small screens */
     .topbar-search {
         display: none;
     }
@@ -47,22 +134,251 @@
         display: none;
     }
     
+    /* Tables */
     table {
         font-size: 0.8rem;
     }
     
     th, td {
-        padding: 0.75rem 1rem;
+        padding: 0.75rem 0.5rem;
+    }
+    
+    /* Cards */
+    .card {
+        padding: 1rem;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    /* Page Header */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    /* Action Buttons */
+    .page-actions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    .page-actions .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    /* Order Cards */
+    .order-card {
+        padding: 1rem;
+    }
+    
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .order-items {
+        flex-direction: column;
+    }
+    
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .footer-section {
+        text-align: center;
+    }
+    
+    .footer-brand {
+        justify-content: center;
+    }
+    
+    .footer-social {
+        justify-content: center;
+    }
+    
+    /* Toast notifications */
+    .toast-container {
+        right: 1rem;
+        left: 1rem;
+    }
+    
+    .toast {
+        max-width: 100%;
+    }
+    
+    /* Alerts */
+    .alerts-container {
+        padding: 0;
+    }
+    
+    /* Modal */
+    .modal-content {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
     }
 }
 
-/* Print Styles */
+/* ============================================
+   Small Mobile (max-width: 480px)
+   ============================================ */
+@media (max-width: 480px) {
+    /* Extra small adjustments */
+    .page-content {
+        padding: 0.75rem;
+    }
+    
+    .topbar {
+        padding: 0 0.75rem;
+    }
+    
+    .sidebar-toggle {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+    
+    .topbar-cart {
+        width: 36px;
+        height: 36px;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.625rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.25rem;
+    }
+    
+    /* Product cards */
+    .product-card {
+        padding: 0.75rem;
+    }
+    
+    .product-title {
+        font-size: 0.9rem;
+    }
+    
+    .product-price {
+        font-size: 1rem;
+    }
+    
+    /* Metric cards */
+    .metric-value {
+        font-size: 1.5rem;
+    }
+    
+    .metric-label {
+        font-size: 0.75rem;
+    }
+    
+    /* Tables - horizontal scroll */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 500px;
+    }
+    
+    /* Cart items */
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .cart-item-image {
+        width: 100%;
+        max-width: 150px;
+    }
+    
+    /* Account sections */
+    .account-section {
+        padding: 1rem;
+    }
+    
+    /* Charts */
+    .chart-container {
+        height: 250px;
+    }
+}
+
+/* ============================================
+   Landscape Mobile
+   ============================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+    .sidebar {
+        overflow-y: auto;
+    }
+    
+    .sidebar-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .sidebar-logo {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .nav-link {
+        padding: 0.5rem 1rem;
+    }
+    
+    .sidebar-footer {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
 @media print {
-    .sidebar, .topbar, .main-footer {
-        display: none;
+    .sidebar, 
+    .sidebar-overlay,
+    .topbar, 
+    .main-footer,
+    .sidebar-toggle,
+    .btn,
+    .toast-container {
+        display: none !important;
     }
     
     .main-content {
-        margin-left: 0;
+        margin-left: 0 !important;
+    }
+    
+    .page-content {
+        padding: 0 !important;
+    }
+    
+    body {
+        background: white !important;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
     }
 }

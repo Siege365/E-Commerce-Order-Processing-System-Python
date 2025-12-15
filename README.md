@@ -18,6 +18,7 @@
 - [Key Features](#key-features)
 - [API Endpoints](#api-endpoints)
 - [Database Schema](#database-schema)
+- [Deployment to Render](#deployment-to-render)
 - [Troubleshooting](#troubleshooting)
 - [Development Guide](#development-guide)
 
@@ -900,7 +901,84 @@ class OrderItem:
 
 ---
 
-## 🐛 Troubleshooting
+## � Deployment to Render
+
+ShopPy is configured for easy deployment to [Render](https://render.com). Follow these steps:
+
+### Option 1: Blueprint Deployment (Recommended)
+
+1. **Fork/Push to GitHub**: Ensure your code is in a GitHub repository
+
+2. **Deploy via Blueprint**:
+
+   - Go to [Render Dashboard](https://dashboard.render.com)
+   - Click **New** → **Blueprint**
+   - Connect your GitHub repository
+   - Render will auto-detect `render.yaml` and create all services
+
+3. **Set Environment Variables** (if not using Blueprint):
+   - `ADMIN_USERNAME`: Admin username
+   - `ADMIN_EMAIL`: Admin email
+   - `ADMIN_PASSWORD`: Secure admin password
+
+### Option 2: Manual Deployment
+
+1. **Create PostgreSQL Database**:
+
+   - Go to Render Dashboard → **New** → **PostgreSQL**
+   - Choose a name and region
+   - Note the **Internal Database URL**
+
+2. **Create Web Service**:
+
+   - Go to Render Dashboard → **New** → **Web Service**
+   - Connect your GitHub repository
+   - Configure:
+     - **Runtime**: Python 3
+     - **Build Command**: `./build.sh`
+     - **Start Command**: `gunicorn lib.ECommerce.wsgi:application --bind 0.0.0.0:$PORT`
+
+3. **Add Environment Variables**:
+
+   ```
+   DJANGO_SECRET_KEY    = (click "Generate" for a secure key)
+   DEBUG                = False
+   ALLOWED_HOSTS        = your-app-name.onrender.com
+   DATABASE_URL         = (paste Internal Database URL from step 1)
+   ADMIN_USERNAME       = admin
+   ADMIN_EMAIL          = admin@yourdomain.com
+   ADMIN_PASSWORD       = your-secure-password
+   ```
+
+4. **Deploy**: Click **Create Web Service**
+
+### Post-Deployment
+
+- **Access your app**: `https://your-app-name.onrender.com`
+- **Login**: Use the admin credentials you set
+- **Import sample data** (optional): Use Django admin or create products manually
+
+### Deployment Files
+
+| File               | Purpose                                              |
+| ------------------ | ---------------------------------------------------- |
+| `render.yaml`      | Render Blueprint configuration                       |
+| `build.sh`         | Build script (migrations, collectstatic, admin user) |
+| `Procfile`         | Process configuration for gunicorn                   |
+| `runtime.txt`      | Python version specification                         |
+| `requirements.txt` | Python dependencies                                  |
+
+### Custom Domain
+
+To use a custom domain:
+
+1. Add domain in Render Dashboard → Your Service → Settings → Custom Domains
+2. Add environment variable: `CUSTOM_DOMAIN=www.yourdomain.com`
+3. Update DNS records as instructed by Render
+
+---
+
+## �🐛 Troubleshooting
 
 ### Common Issues
 

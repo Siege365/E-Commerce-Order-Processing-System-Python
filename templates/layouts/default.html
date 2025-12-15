@@ -7,11 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/main.css?v=20251213-004">
+    <link rel="stylesheet" href="/static/css/main.css?v=20251215-mobile-fix">
     <link rel="icon" type="image/svg+xml" href="/static/images/python-logo-primary.svg">
     {% block extra_css %}{% endblock %}
 </head>
 <body class="app-body">
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="{% url 'dashboard' %}" class="sidebar-brand">
@@ -161,8 +163,53 @@
         </footer>
     </main>
     <script>
+        // Sidebar Toggle - Mobile-aware logic
         const sidebarToggle = document.getElementById('sidebarToggle');
-        if (sidebarToggle) { sidebarToggle.addEventListener('click', () => { document.body.classList.toggle('sidebar-collapsed'); }); }
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const MOBILE_BREAKPOINT = 1024;
+        
+        function isMobile() {
+            return window.innerWidth <= MOBILE_BREAKPOINT;
+        }
+        
+        function toggleSidebar() {
+            if (isMobile()) {
+                // On mobile: toggle mobile-open class (shows full sidebar with text)
+                document.body.classList.toggle('sidebar-mobile-open');
+            } else {
+                // On desktop: toggle collapsed class (shrinks sidebar)
+                document.body.classList.toggle('sidebar-collapsed');
+            }
+        }
+        
+        function closeMobileSidebar() {
+            document.body.classList.remove('sidebar-mobile-open');
+        }
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', toggleSidebar);
+        }
+        
+        // Close sidebar when clicking overlay
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileSidebar);
+        }
+        
+        // Close sidebar on window resize if switching from mobile to desktop
+        window.addEventListener('resize', () => {
+            if (!isMobile()) {
+                closeMobileSidebar();
+            }
+        });
+        
+        // Close sidebar when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isMobile()) {
+                closeMobileSidebar();
+            }
+        });
+        
+        // Auto-dismiss alerts
         setTimeout(() => { document.querySelectorAll('.alert').forEach(a => { a.style.opacity = '0'; setTimeout(() => a.remove(), 300); }); }, 5000);
         
         // Toast Notification System

@@ -11,8 +11,10 @@
     display: flex;
     flex-direction: column;
     z-index: 1000;
-    transition: width var(--transition-normal);
+    transition: width var(--transition-normal), transform var(--transition-normal);
     overflow: hidden;
+    /* Ensure sidebar is above overlay */
+    will-change: transform, width;
 }
 
 .sidebar-collapsed .sidebar {
