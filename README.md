@@ -967,6 +967,20 @@ ADMIN_PASSWORD       = your-secure-password`
 | `runtime.txt`      | Python version specification                         |
 | `requirements.txt` | Python dependencies                                  |
 
+### Adding Sample Products
+
+After deployment, import sample products using Render Shell:
+
+```bash
+# Option 1: Using Django management command
+python manage.py import_sample_products
+
+# Option 2: Clear existing and re-import
+python manage.py import_sample_products --clear
+```
+
+**Note:** The build script automatically imports sample products if the database is empty.
+
 ### Custom Domain
 
 To use a custom domain:
