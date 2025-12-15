@@ -4,11 +4,9 @@
 # Core Framework
 Django>=4.2,<5.0
 
-# Production WSGI Server
-gunicorn>=21.0.0
-
-# Database
-psycopg2-binary>=2.9.9    # PostgreSQL adapter for production
+# Database Adapters
+mysqlclient>=2.2.0        # MySQL adapter for PythonAnywhere
+psycopg2-binary>=2.9.9    # PostgreSQL adapter (if using PostgreSQL)
 dj-database-url>=2.1.0    # Parse DATABASE_URL environment variable
 
 # Static Files
