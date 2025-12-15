@@ -34,10 +34,7 @@ if admin_password:
         User.objects.create_superuser(
             username=admin_username,
             email=admin_email,
-            password=admin_password,
-            role='admin',
-            first_name='Admin',
-            last_name='User'
+            password=admin_password
         )
         print(f'Admin user \"{admin_username}\" created successfully!')
     else:
