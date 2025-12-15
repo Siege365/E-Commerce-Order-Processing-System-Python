@@ -1,10 +1,10 @@
-﻿# ðŸ ShopPy - E-Commerce Order Processing System
+# ?? ShopPy - E-Commerce Order Processing System
 
 **Python/Django Full-Stack E-Commerce Platform**
 
-> _Wrapped in code, packed with deals._ ðŸ›’
+> _Wrapped in code, packed with deals._ ??
 
-## ðŸ“‹ Table of Contents
+## ?? Table of Contents
 
 - [Overview](#overview)
 - [Quick Start](#quick-start)
@@ -24,7 +24,7 @@
 
 ---
 
-## ðŸŽ¯ Overview
+## ?? Overview
 
 ShopPy is a full-featured e-commerce order processing system built with Django 4.2, featuring:
 
@@ -46,7 +46,7 @@ ShopPy is a full-featured e-commerce order processing system built with Django 4
 
 ---
 
-## ðŸš€ Quick Start (5 Minutes)
+## ?? Quick Start (5 Minutes)
 
 ```bash
 # 1. Clone the repository
@@ -75,7 +75,7 @@ python manage.py runserver
 - Staff: `staff` / `staff123`
 - Customer: `customer` / `customer123`
 
-> **âš ï¸ SECURITY WARNING:**
+> **⚠️ SECURITY WARNING:**
 >
 > - These default credentials are for **DEVELOPMENT ONLY**
 > - **NEVER use these passwords in production**
@@ -84,7 +84,7 @@ python manage.py runserver
 
 ---
 
-## ðŸ’» System Requirements
+## ?? System Requirements
 
 ### Required
 
@@ -107,7 +107,7 @@ python manage.py runserver
 
 ---
 
-## ðŸ“¦ Installation & Setup
+## ?? Installation & Setup
 
 ### Step 1: Set Up Virtual Environment (Recommended)
 
@@ -198,49 +198,49 @@ python manage.py runserver
 
 ---
 
-## ðŸ—ï¸ Project Architecture
+## ??? Project Architecture
 
 ### System Design
 
 ShopPy follows the **Model-View-Controller (MVC)** pattern adapted to Django's **Model-View-Template (MVT)** architecture:
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                   Client (Browser)                  â”‚
-â”‚        HTML + CSS + JavaScript (Frontend)           â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                   â”‚ HTTP Requests
-                   â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚               URL Router (urls.py)                  â”‚
-â”‚         Routes requests to controllers              â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                   â”‚
-                   â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚            Controllers (Routes)                     â”‚
-â”‚  â”œâ”€â”€ shared_routes.py (Auth, Dashboard, Common)    â”‚
-â”‚  â”œâ”€â”€ admin_routes.py (Admin Operations)            â”‚
-â”‚  â””â”€â”€ customer_routes.py (Shopping, Cart, Orders)   â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                   â”‚
-         â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-         â–¼                    â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚   Models       â”‚   â”‚   Templates      â”‚
-â”‚  (Database)    â”‚   â”‚   (Views)        â”‚
-â”‚ â”œâ”€â”€ User       â”‚   â”‚ â”œâ”€â”€ login.html   â”‚
-â”‚ â”œâ”€â”€ Customer   â”‚   â”‚ â”œâ”€â”€ dashboard    â”‚
-â”‚ â”œâ”€â”€ Product    â”‚   â”‚ â”œâ”€â”€ products     â”‚
-â”‚ â””â”€â”€ Order      â”‚   â”‚ â””â”€â”€ orders       â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-         â”‚                    â”‚
-         â””â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                  â–¼
-         â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-         â”‚   Database      â”‚
-         â”‚   (SQLite)      â”‚
-         â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌─────────────────────────────────────────────────────┐
+│                   Client (Browser)                  │
+│        HTML + CSS + JavaScript (Frontend)           │
+└──────────────────┬──────────────────────────────────┘
+                   │ HTTP Requests
+                   ▼
+┌─────────────────────────────────────────────────────┐
+│               URL Router (urls.py)                  │
+│         Routes requests to controllers              │
+└──────────────────┬──────────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────────┐
+│            Controllers (Routes)                     │
+│  ├── shared_routes.py (Auth, Dashboard, Common)    │
+│  ├── admin_routes.py (Admin Operations)            │
+│  └── customer_routes.py (Shopping, Cart, Orders)   │
+└──────────────────┬──────────────────────────────────┘
+                   │
+         ┌─────────┴──────────┐
+         ▼                    ▼
+┌────────────────┐   ┌──────────────────┐
+│   Models       │   │   Templates      │
+│  (Database)    │   │   (Views)        │
+│ ├── User       │   │ ├── login.html   │
+│ ├── Customer   │   │ ├── dashboard    │
+│ ├── Product    │   │ ├── products     │
+│ └── Order      │   │ └── orders       │
+└────────────────┘   └──────────────────┘
+         │                    │
+         └────────┬───────────┘
+                  ▼
+         ┌─────────────────┐
+         │   Database      │
+         │   (SQLite)      │
+         └─────────────────┘
 ```
 
 ### Layer Breakdown
@@ -289,129 +289,129 @@ ShopPy follows the **Model-View-Controller (MVC)** pattern adapted to Django's *
 
 ---
 
-## ðŸ“ Directory Structure
+## ?? Directory Structure
 
 ```
 E-Commerce-Order-Processing-System-Python/
-â”‚
-â”œâ”€â”€ manage.py                      # Django CLI management script
-â”œâ”€â”€ requirements.txt               # Python dependencies
-â”œâ”€â”€ .env.example                   # Environment template
-â”œâ”€â”€ README.md                      # This file
-â”‚
-â”œâ”€â”€ data/                          # Database and data files
-â”‚   â””â”€â”€ ecommerce.db              # SQLite database (auto-created)
-â”‚
-â”œâ”€â”€ docs/                          # Documentation
-â”‚   â””â”€â”€ docs-MUST-READ.md         # Detailed documentation
-â”‚
-â”œâ”€â”€ lib/ECommerce/                 # Main Django application
-â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”œâ”€â”€ Config.py                  # Django settings
-â”‚   â”œâ”€â”€ urls.py                    # URL routing
-â”‚   â”œâ”€â”€ wsgi.py                    # WSGI entry point
-â”‚   â”œâ”€â”€ Auth.py                    # Auth utilities
-â”‚   â”œâ”€â”€ Database.py                # DB initialization
-â”‚   â”œâ”€â”€ context_processors.py      # Template contexts
-â”‚   â”‚
-â”‚   â”œâ”€â”€ Controllers/               # Route handlers (Views)
-â”‚   â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”‚   â”œâ”€â”€ shared_routes.py      # Common routes
-â”‚   â”‚   â”œâ”€â”€ admin_routes.py       # Admin routes
-â”‚   â”‚   â”œâ”€â”€ customer_routes.py    # Customer routes
-â”‚   â”‚   â”œâ”€â”€ Admin/                # Admin modules
-â”‚   â”‚   â””â”€â”€ Customer/             # Customer modules
-â”‚   â”‚
-â”‚   â”œâ”€â”€ Models/                    # Database models (ORM)
-â”‚   â”‚   â”œâ”€â”€ __init__.py
-â”‚   â”‚   â”œâ”€â”€ User.py               # User authentication
-â”‚   â”‚   â”œâ”€â”€ Customer.py           # Customer profiles
-â”‚   â”‚   â”œâ”€â”€ Product.py            # Product catalog
-â”‚   â”‚   â””â”€â”€ Order.py              # Orders & items
-â”‚   â”‚
-â”‚   â””â”€â”€ migrations/                # Database migrations
-â”‚       â””â”€â”€ 0001_initial.py       # Initial schema
-â”‚
-â”œâ”€â”€ public/                        # Static files (CSS/JS/Images)
-â”‚   â”œâ”€â”€ css/
-â”‚   â”‚   â”œâ”€â”€ style.css             # Main stylesheet
-â”‚   â”‚   â”œâ”€â”€ base/                 # Base styles
-â”‚   â”‚   â”‚   â”œâ”€â”€ reset.css
-â”‚   â”‚   â”‚   â”œâ”€â”€ typography.css
-â”‚   â”‚   â”‚   â””â”€â”€ variables.css     # CSS variables
-â”‚   â”‚   â”œâ”€â”€ components/           # UI components
-â”‚   â”‚   â”‚   â”œâ”€â”€ buttons.css
-â”‚   â”‚   â”‚   â”œâ”€â”€ cards.css
-â”‚   â”‚   â”‚   â”œâ”€â”€ forms.css
-â”‚   â”‚   â”‚   â”œâ”€â”€ modals.css
-â”‚   â”‚   â”‚   â””â”€â”€ tables.css
-â”‚   â”‚   â”œâ”€â”€ layout/               # Layout styles
-â”‚   â”‚   â”‚   â”œâ”€â”€ header.css
-â”‚   â”‚   â”‚   â”œâ”€â”€ sidebar.css
-â”‚   â”‚   â”‚   â””â”€â”€ footer.css
-â”‚   â”‚   â”œâ”€â”€ pages/                # Page-specific
-â”‚   â”‚   â”‚   â”œâ”€â”€ auth.css
-â”‚   â”‚   â”‚   â”œâ”€â”€ dashboard.css
-â”‚   â”‚   â”‚   â”œâ”€â”€ products.css
-â”‚   â”‚   â”‚   â””â”€â”€ orders.css
-â”‚   â”‚   â””â”€â”€ utilities/            # Helpers
-â”‚   â”‚       â”œâ”€â”€ animations.css
-â”‚   â”‚       â”œâ”€â”€ helpers.css
-â”‚   â”‚       â””â”€â”€ responsive.css
-â”‚   â”‚
-â”‚   â”œâ”€â”€ js/
-â”‚   â”‚   â”œâ”€â”€ admin/                # Admin JavaScript
-â”‚   â”‚   â”‚   â”œâ”€â”€ common.js
-â”‚   â”‚   â”‚   â”œâ”€â”€ dashboard.js
-â”‚   â”‚   â”‚   â”œâ”€â”€ products-list.js
-â”‚   â”‚   â”‚   â”œâ”€â”€ orders-list.js
-â”‚   â”‚   â”‚   â””â”€â”€ customers.js
-â”‚   â”‚   â””â”€â”€ customer/             # Customer JavaScript
-â”‚   â”‚       â”œâ”€â”€ products.js
-â”‚   â”‚       â”œâ”€â”€ cart.js
-â”‚   â”‚       â””â”€â”€ account.js
-â”‚   â”‚
-â”‚   â””â”€â”€ images/                    # Static images
-â”‚       â”œâ”€â”€ python-logo-primary.svg
-â”‚       â”œâ”€â”€ empty-cart.svg
-â”‚       â””â”€â”€ ...
-â”‚
-â”œâ”€â”€ scripts/                       # Utility scripts
-â”‚   â”œâ”€â”€ create_admin.py           # Create superuser
-â”‚   â”œâ”€â”€ import_products.py        # Import products
-â”‚   â””â”€â”€ import_stock.py           # Import inventory
-â”‚
-â””â”€â”€ templates/                     # Django HTML templates
-    â”œâ”€â”€ login.html                # Login page
-    â”‚
-    â”œâ”€â”€ layouts/                  # Base templates
-    â”‚   â”œâ”€â”€ default.html          # Main layout
-    â”‚   â””â”€â”€ auth.html             # Auth layout
-    â”‚
-    â”œâ”€â”€ admin/                    # Admin templates
-    â”‚   â”œâ”€â”€ dashboard_admin.html
-    â”‚   â”œâ”€â”€ products_admin.html
-    â”‚   â”œâ”€â”€ product_add.html
-    â”‚   â”œâ”€â”€ product_edit.html
-    â”‚   â”œâ”€â”€ orders_admin.html
-    â”‚   â”œâ”€â”€ order_detail_admin.html
-    â”‚   â”œâ”€â”€ customers.html
-    â”‚   â”œâ”€â”€ customer_detail.html
-    â”‚   â””â”€â”€ reports.html
-    â”‚
-    â””â”€â”€ customer/                 # Customer templates
-        â”œâ”€â”€ register.html
-        â”œâ”€â”€ dashboard_customer.html
-        â”œâ”€â”€ products_customer.html
-        â”œâ”€â”€ cart.html
-        â”œâ”€â”€ orders_customer.html
-        â”œâ”€â”€ order_detail_customer.html
-        â””â”€â”€ account.html
+│
+├── manage.py                      # Django CLI management script
+├── requirements.txt               # Python dependencies
+├── .env.example                   # Environment template
+├── README.md                      # This file
+│
+├── data/                          # Database and data files
+│   └── ecommerce.db              # SQLite database (auto-created)
+│
+├── docs/                          # Documentation
+│   └── docs-MUST-READ.md         # Detailed documentation
+│
+├── lib/ECommerce/                 # Main Django application
+│   ├── __init__.py
+│   ├── Config.py                  # Django settings
+│   ├── urls.py                    # URL routing
+│   ├── wsgi.py                    # WSGI entry point
+│   ├── Auth.py                    # Auth utilities
+│   ├── Database.py                # DB initialization
+│   ├── context_processors.py      # Template contexts
+│   │
+│   ├── Controllers/               # Route handlers (Views)
+│   │   ├── __init__.py
+│   │   ├── shared_routes.py      # Common routes
+│   │   ├── admin_routes.py       # Admin routes
+│   │   ├── customer_routes.py    # Customer routes
+│   │   ├── Admin/                # Admin modules
+│   │   └── Customer/             # Customer modules
+│   │
+│   ├── Models/                    # Database models (ORM)
+│   │   ├── __init__.py
+│   │   ├── User.py               # User authentication
+│   │   ├── Customer.py           # Customer profiles
+│   │   ├── Product.py            # Product catalog
+│   │   └── Order.py              # Orders & items
+│   │
+│   └── migrations/                # Database migrations
+│       └── 0001_initial.py       # Initial schema
+│
+├── public/                        # Static files (CSS/JS/Images)
+│   ├── css/
+│   │   ├── style.css             # Main stylesheet
+│   │   ├── base/                 # Base styles
+│   │   │   ├── reset.css
+│   │   │   ├── typography.css
+│   │   │   └── variables.css     # CSS variables
+│   │   ├── components/           # UI components
+│   │   │   ├── buttons.css
+│   │   │   ├── cards.css
+│   │   │   ├── forms.css
+│   │   │   ├── modals.css
+│   │   │   └── tables.css
+│   │   ├── layout/               # Layout styles
+│   │   │   ├── header.css
+│   │   │   ├── sidebar.css
+│   │   │   └── footer.css
+│   │   ├── pages/                # Page-specific
+│   │   │   ├── auth.css
+│   │   │   ├── dashboard.css
+│   │   │   ├── products.css
+│   │   │   └── orders.css
+│   │   └── utilities/            # Helpers
+│   │       ├── animations.css
+│   │       ├── helpers.css
+│   │       └── responsive.css
+│   │
+│   ├── js/
+│   │   ├── admin/                # Admin JavaScript
+│   │   │   ├── common.js
+│   │   │   ├── dashboard.js
+│   │   │   ├── products-list.js
+│   │   │   ├── orders-list.js
+│   │   │   └── customers.js
+│   │   └── customer/             # Customer JavaScript
+│   │       ├── products.js
+│   │       ├── cart.js
+│   │       └── account.js
+│   │
+│   └── images/                    # Static images
+│       ├── python-logo-primary.svg
+│       ├── empty-cart.svg
+│       └── ...
+│
+├── scripts/                       # Utility scripts
+│   ├── create_admin.py           # Create superuser
+│   ├── import_products.py        # Import products
+│   └── import_stock.py           # Import inventory
+│
+└── templates/                     # Django HTML templates
+    ├── login.html                # Login page
+    │
+    ├── layouts/                  # Base templates
+    │   ├── default.html          # Main layout
+    │   └── auth.html             # Auth layout
+    │
+    ├── admin/                    # Admin templates
+    │   ├── dashboard_admin.html
+    │   ├── products_admin.html
+    │   ├── product_add.html
+    │   ├── product_edit.html
+    │   ├── orders_admin.html
+    │   ├── order_detail_admin.html
+    │   ├── customers.html
+    │   ├── customer_detail.html
+    │   └── reports.html
+    │
+    └── customer/                 # Customer templates
+        ├── register.html
+        ├── dashboard_customer.html
+        ├── products_customer.html
+        ├── cart.html
+        ├── orders_customer.html
+        ├── order_detail_customer.html
+        └── account.html
 ```
 
 ---
 
-## âš™ï¸ Configuration
+## ⚙️ Configuration
 
 ### Environment Variables
 
@@ -476,7 +476,7 @@ USE_TZ = True
 
 ---
 
-## ðŸƒ Running the Application
+## ?? Running the Application
 
 ### Development Server
 
@@ -539,54 +539,54 @@ sudo systemctl start shoppy
 
 ---
 
-## ðŸ‘¥ User Roles & Access
+## ?? User Roles & Access
 
 ### Role Hierarchy
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                    Admin                        â”‚
-â”‚  Full system access + user management          â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                    â”‚
-        â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”´â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-        â”‚                       â”‚
-â”Œâ”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”
-â”‚      Staff       â”‚   â”‚    Customer    â”‚
-â”‚  Product mgmt    â”‚   â”‚    Shopping    â”‚
-â”‚  Order mgmt      â”‚   â”‚    Cart        â”‚
-â”‚  Reports         â”‚   â”‚    Orders      â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌─────────────────────────────────────────────────┐
+│                    Admin                        │
+│  Full system access + user management          │
+└───────────────────┬─────────────────────────────┘
+                    │
+        ┌───────────┴───────────┐
+        │                       │
+┌───────▼──────────┐   ┌────────▼───────┐
+│      Staff       │   │    Customer    │
+│  Product mgmt    │   │    Shopping    │
+│  Order mgmt      │   │    Cart        │
+│  Reports         │   │    Orders      │
+└──────────────────┘   └────────────────┘
 ```
 
 ### Admin Permissions
 
-- âœ… Create/edit/delete products
-- âœ… Manage inventory and pricing
-- âœ… View all orders and customers
-- âœ… Update order status
-- âœ… Generate reports
-- âœ… Create staff/admin users
-- âœ… System configuration
+- ✅ Create/edit/delete products
+- ✅ Manage inventory and pricing
+- ✅ View all orders and customers
+- ✅ Update order status
+- ✅ Generate reports
+- ✅ Create staff/admin users
+- ✅ System configuration
 
 ### Staff Permissions
 
-- âœ… View/edit products
-- âœ… Manage orders
-- âœ… View customer data
-- âœ… Generate reports
-- âŒ Create users
-- âŒ System settings
+- ✅ View/edit products
+- ✅ Manage orders
+- ✅ View customer data
+- ✅ Generate reports
+- ❌ Create users
+- ❌ System settings
 
 ### Customer Permissions
 
-- âœ… Browse products
-- âœ… Add to cart
-- âœ… Checkout
-- âœ… View order history
-- âœ… Update profile
-- âŒ Access admin pages
-- âŒ Manage products
+- ✅ Browse products
+- ✅ Add to cart
+- ✅ Checkout
+- ✅ View order history
+- ✅ Update profile
+- ❌ Access admin pages
+- ❌ Manage products
 
 ### Authentication Flow
 
@@ -611,7 +611,7 @@ def checkout(request):
 
 ---
 
-## âœ¨ Key Features
+## ✨ Key Features
 
 ### 1. Product Management
 
@@ -668,7 +668,7 @@ def checkout(request):
 
 ---
 
-## ðŸ”Œ API Endpoints
+## ?? API Endpoints
 
 ### Authentication
 
@@ -762,65 +762,65 @@ Response (Error):
 
 ---
 
-## ðŸ—„ï¸ Database Schema
+## ??? Database Schema
 
 ### Entity Relationship Diagram
 
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚     User     â”‚â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”‚          â”‚
-â”‚ id (PK)      â”‚          â”‚
-â”‚ username     â”‚          â”‚
-â”‚ email        â”‚          â”‚ 1:1
-â”‚ password     â”‚          â”‚
-â”‚ role         â”‚    â”Œâ”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚ created_at   â”‚    â”‚   Customer   â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜    â”‚â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”‚
-                    â”‚ id (PK)      â”‚
-       â”‚            â”‚ user_id (FK) â”‚â—„â”€â”€â”€â”€â”€â”€â”€â”€â”
-       â”‚            â”‚ first_name   â”‚         â”‚
-       â”‚ 1:N        â”‚ last_name    â”‚         â”‚
-       â”‚            â”‚ phone        â”‚         â”‚ N:1
-       â”‚            â”‚ address      â”‚         â”‚
-       â–¼            â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜         â”‚
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                             â”‚
-â”‚    Order     â”‚                             â”‚
-â”‚â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”‚                             â”‚
-â”‚ id (PK)      â”‚                             â”‚
-â”‚ customer_id  â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-â”‚ order_number â”‚
-â”‚ status       â”‚
-â”‚ subtotal     â”‚
-â”‚ tax          â”‚         â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚ shipping     â”‚         â”‚   Product    â”‚
-â”‚ total        â”‚         â”‚â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”‚
-â”‚ created_at   â”‚         â”‚ id (PK)      â”‚
-â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜         â”‚ name         â”‚
-       â”‚                 â”‚ description  â”‚
-       â”‚ 1:N             â”‚ price        â”‚
-       â”‚                 â”‚ stock        â”‚
-       â–¼                 â”‚ image_url    â”‚
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”         â”‚ category     â”‚
-â”‚  OrderItem   â”‚         â”‚ created_at   â”‚
-â”‚â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”‚         â””â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”˜
-â”‚ id (PK)      â”‚                â”‚
-â”‚ order_id (FK)â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
-â”‚ product_id   â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¼â”€â”€â”€â”˜ N:1
-â”‚ quantity     â”‚            â”‚
-â”‚ price        â”‚            â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜            â”‚
-                            â”‚ 1:N
-                            â–¼
-                   â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-                   â”‚ InventoryTransaction â”‚
-                   â”‚â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”‚
-                   â”‚ id (PK)              â”‚
-                   â”‚ product_id (FK)      â”‚
-                   â”‚ quantity             â”‚
-                   â”‚ type                 â”‚
-                   â”‚ timestamp            â”‚
-                   â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+┌──────────────┐
+│     User     │──────────┐
+│──────────────│          │
+│ id (PK)      │          │
+│ username     │          │
+│ email        │          │ 1:1
+│ password     │          │
+│ role         │    ┌─────▼────────┐
+│ created_at   │    │   Customer   │
+└──────────────┘    │──────────────│
+                    │ id (PK)      │
+       │            │ user_id (FK) │◄────────┐
+       │            │ first_name   │         │
+       │ 1:N        │ last_name    │         │
+       │            │ phone        │         │ N:1
+       │            │ address      │         │
+       ▼            └──────────────┘         │
+┌──────────────┐                             │
+│    Order     │                             │
+│──────────────│                             │
+│ id (PK)      │                             │
+│ customer_id  ├─────────────────────────────┘
+│ order_number │
+│ status       │
+│ subtotal     │
+│ tax          │         ┌──────────────┐
+│ shipping     │         │   Product    │
+│ total        │         │──────────────│
+│ created_at   │         │ id (PK)      │
+└──────┬───────┘         │ name         │
+       │                 │ description  │
+       │ 1:N             │ price        │
+       │                 │ stock        │
+       ▼                 │ image_url    │
+┌──────────────┐         │ category     │
+│  OrderItem   │         │ created_at   │
+│──────────────│         └──────┬───────┘
+│ id (PK)      │                │
+│ order_id (FK)├────────────┐   │
+│ product_id   ├────────────┼───┘ N:1
+│ quantity     │            │
+│ price        │            │
+└──────────────┘            │
+                            │ 1:N
+                            ▼
+                   ┌──────────────────────┐
+                   │ InventoryTransaction │
+                   │──────────────────────│
+                   │ id (PK)              │
+                   │ product_id (FK)      │
+                   │ quantity             │
+                   │ type                 │
+                   │ timestamp            │
+                   └──────────────────────┘
 ```
 
 ### Table Definitions
@@ -902,7 +902,8 @@ class OrderItem:
 ---
 
 ## Deployment to PythonAnywhere
-##  Deployment to Render
+
+## Deployment to Render
 
 ShopPy is configured for easy deployment to [Render](https://render.com). Follow these steps:
 
@@ -911,8 +912,9 @@ ShopPy is configured for easy deployment to [Render](https://render.com). Follow
 1. **Fork/Push to GitHub**: Ensure your code is in a GitHub repository
 
 2. **Deploy via Blueprint**:
+
    - Go to [Render Dashboard](https://dashboard.render.com)
-   - Click **New**  **Blueprint**
+   - Click **New** **Blueprint**
    - Connect your GitHub repository
    - Render will auto-detect `render.yaml` and create all services
 
@@ -924,12 +926,14 @@ ShopPy is configured for easy deployment to [Render](https://render.com). Follow
 ### Option 2: Manual Deployment
 
 1. **Create PostgreSQL Database**:
-   - Go to Render Dashboard  **New**  **PostgreSQL**
+
+   - Go to Render Dashboard **New** **PostgreSQL**
    - Choose a name and region
    - Note the **Internal Database URL**
 
 2. **Create Web Service**:
-   - Go to Render Dashboard  **New**  **Web Service**
+
+   - Go to Render Dashboard **New** **Web Service**
    - Connect your GitHub repository
    - Configure:
      - **Runtime**: Python 3
@@ -937,15 +941,13 @@ ShopPy is configured for easy deployment to [Render](https://render.com). Follow
      - **Start Command**: `gunicorn lib.ECommerce.wsgi:application --bind 0.0.0.0:$PORT`
 
 3. **Add Environment Variables**:
-   ``
-   DJANGO_SECRET_KEY    = (click "Generate" for a secure key)
-   DEBUG                = False
-   ALLOWED_HOSTS        = your-app-name.onrender.com
-   DATABASE_URL         = (paste Internal Database URL from step 1)
-   ADMIN_USERNAME       = admin
-   ADMIN_EMAIL          = admin@yourdomain.com
-   ADMIN_PASSWORD       = your-secure-password
-   ``
+   `DJANGO_SECRET_KEY    = (click "Generate" for a secure key)
+DEBUG                = False
+ALLOWED_HOSTS        = your-app-name.onrender.com
+DATABASE_URL         = (paste Internal Database URL from step 1)
+ADMIN_USERNAME       = admin
+ADMIN_EMAIL          = admin@yourdomain.com
+ADMIN_PASSWORD       = your-secure-password`
 
 4. **Deploy**: Click **Create Web Service**
 
@@ -958,7 +960,7 @@ ShopPy is configured for easy deployment to [Render](https://render.com). Follow
 ### Deployment Files
 
 | File               | Purpose                                              |
-|--------------------|------------------------------------------------------|
+| ------------------ | ---------------------------------------------------- |
 | `render.yaml`      | Render Blueprint configuration                       |
 | `build.sh`         | Build script (migrations, collectstatic, admin user) |
 | `Procfile`         | Process configuration for gunicorn                   |
@@ -969,13 +971,15 @@ ShopPy is configured for easy deployment to [Render](https://render.com). Follow
 
 To use a custom domain:
 
-1. Add domain in Render Dashboard  Your Service  Settings  Custom Domains
+1. Add domain in Render Dashboard Your Service Settings Custom Domains
 2. Add environment variable: `CUSTOM_DOMAIN=www.yourdomain.com`
 3. Update DNS records as instructed by Render
 
 ---
+
 python manage.py runserver --nothreading --noreload
-```
+
+````
 
 #### 2. Static Files Not Loading
 
@@ -991,7 +995,7 @@ python manage.py collectstatic
 DEBUG = True  # For development
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'public']
-```
+````
 
 #### 3. Migration Errors
 
@@ -1067,7 +1071,7 @@ LOGGING = {
 
 ---
 
-## ðŸ’» Development Guide
+## ?? Development Guide
 
 ### Code Style
 
@@ -1180,7 +1184,7 @@ git push origin feature/new-feature
 
 ---
 
-## ðŸ“ Additional Resources
+## ?? Additional Resources
 
 - **Django Documentation**: https://docs.djangoproject.com/
 - **Python Style Guide**: https://pep8.org/
@@ -1189,13 +1193,13 @@ git push origin feature/new-feature
 
 ---
 
-## ðŸ“„ License
+## ?? License
 
 [Your License Here]
 
 ---
 
-## ðŸ‘¤ Author
+## ?? Author
 
 ShopPy Development Team
 
@@ -1228,7 +1232,7 @@ ShopPy Development Team
 
 ---
 
-## ðŸŽ¨ Project Colors
+## 🎨 Project Colors
 
 ```
 Primary:   #6366f1 (Indigo)
@@ -1240,7 +1244,7 @@ Info:      #3b82f6 (Blue)
 
 ---
 
-## ðŸ“ Adding New Features
+## 📝 Adding New Features
 
 ### Add a New Page
 
@@ -1263,7 +1267,7 @@ Info:      #3b82f6 (Blue)
 
 ---
 
-## ðŸ”§ Configuration
+## 🔧 Configuration
 
 Edit `lib/ECommerce/Config.py`:
 
@@ -1275,7 +1279,7 @@ FREE_SHIPPING_THRESHOLD = 100.00  # Free over $100
 
 ---
 
-## ðŸ’¡ Development Tips
+## 💡 Development Tips
 
 ### Django Shell
 
@@ -1307,7 +1311,7 @@ python manage.py createsuperuser
 
 ---
 
-## ðŸ› Common Issues
+## 🐛 Common Issues
 
 ### Port Already in Use
 
@@ -1330,7 +1334,7 @@ python manage.py migrate
 
 ---
 
-## ðŸ“Š File Sizes
+## 📊 File Sizes
 
 - Models: ~2KB each
 - Templates: ~3-8KB each
@@ -1339,7 +1343,7 @@ python manage.py migrate
 
 ---
 
-## âœ… Checklist for Deployment
+## ✅ Checklist for Deployment
 
 - [ ] Set `DEBUG = False` in settings
 - [ ] Set `SECRET_KEY` to secure value
@@ -1352,7 +1356,7 @@ python manage.py migrate
 
 ---
 
-## ðŸ“š Documentation Files
+## 📚 Documentation Files
 
 - **docs-MUST-READ.md** - Complete project documentation
 - **docs/docs-MUST-READ.md** - Complete project documentation (moved to `docs/`)
@@ -1361,7 +1365,7 @@ python manage.py migrate
 
 ---
 
-## ðŸ†˜ Getting Help
+## 🆘 Getting Help
 
 1. Check `docs-MUST-READ.md` for detailed info
 2. Review template examples
@@ -1370,17 +1374,19 @@ python manage.py migrate
 
 ---
 
-## ðŸŽ¯ Next Steps
+## 🎯 Next Steps
 
-1. âœ… Run the server
-2. âœ… Create admin account
-3. âœ… Add sample products
-4. âœ… Test checkout flow
-5. âœ… Customize branding
-6. âœ… Deploy to production
+1. ✅ Run the server
+2. ✅ Create admin account
+3. ✅ Add sample products
+4. ✅ Test checkout flow
+5. ✅ Customize branding
+6. ✅ Deploy to production
 
 ---
 
-**Happy coding! ðŸ**
+**Happy coding! 🚀**
 
 ShopPy - Wrapped in code, packed with deals.
+
+
